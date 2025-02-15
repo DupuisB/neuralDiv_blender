@@ -128,8 +128,6 @@ class OBJECT_OT_NN_Subdivide(bpy.types.Operator):
             return {'CANCELLED'}
 
         # --- Process network output ---
-        # Assume outputs is a list (one for each subdivision level).
-        # We choose the last level (highest resolution) as our result.
         try:
             level = len(outputs) - 1
             out = outputs[level].cpu().squeeze(0)  # shape: [num_vertices, 3]
@@ -137,30 +135,30 @@ class OBJECT_OT_NN_Subdivide(bpy.types.Operator):
             self.report({'ERROR'}, f"Failed to process network output: {e}")
             return {'CANCELLED'}
 
-        # Retrieve face connectivity from TestMeshes.
+        # Retrieve face connectivity from TestMeshes
         try:
-            # T.meshes is assumed to be a list per input mesh; each element is a list over levels.
             faces_tensor = T.meshes[mIdx][level].F.cpu()
             faces = faces_tensor.tolist()
         except Exception as e:
             self.report({'ERROR'}, f"Failed to retrieve face connectivity: {e}")
             return {'CANCELLED'}
 
-        # --- Create a new Blender mesh from the network output ---
+        # --- Update the existing mesh with new geometry ---
         try:
-            new_mesh = bpy.data.meshes.new(obj.name + "_subdiv")
-            vertices_out = out.tolist()  # each element is [x, y, z]
-            new_mesh.from_pydata(vertices_out, [], faces)
-            new_mesh.update()
-
-            new_obj = bpy.data.objects.new(obj.name + "_subdiv", new_mesh)
-            context.collection.objects.link(new_obj)
-            context.view_layer.objects.active = new_obj
-            new_obj.select_set(True)
+            # Clear existing mesh data
+            obj.data.clear_geometry()
+            
+            # Update mesh with new vertices and faces
+            vertices_out = out.tolist()
+            obj.data.from_pydata(vertices_out, [], faces)
+            obj.data.update()
+            
         except Exception as e:
-            self.report({'ERROR'}, f"Failed to create new mesh: {e}")
+            self.report({'ERROR'}, f"Failed to update mesh: {e}")
             return {'CANCELLED'}
 
+        # No need to handle transforms as we're using the existing object
+        
         # --- Clean up temporary file ---
         try:
             os.remove(temp_obj_path)
