@@ -42,9 +42,33 @@ Instead of traditional, linear subdivision rules, this tool uses a neural networ
 
 ---
 
+
 ## 🧠 Training Your Own Models
 
-The code for training your own model is in another repository.
+This repository also contains the Python scripts to train your own custom subdivision models.
+
+The training pipeline is located in the `/training` directory.
+
+### Quickstart
+
+1.  **Prepare Dataset:** Edit the first two lines in `train_hyperparameters.json`:
+    - Set `mesh_folder` to the folder containing all your `.obj` files.
+    - Specify the name of your output folder. This folder must not already exist and should be located under `./data/jobs/{insert name here}/`.
+2.  **Install Dependencies:** Install the required Python packages:
+    ```bash
+    pip install torch scipy matplotlib
+    ```
+3.  **Run Training:** Execute the training script:
+    ```bash
+    python train_full.py
+    ```
+    > **Note:** This setup is designed for Windows.
+
+    If you are using Linux:
+    - Recompile the code in `surface_multigrid_code/09_random_subdiv_remesh`.
+      - Add `libigl` under `surface_multigrid_code/` (it was removed to reduce the zip file size; you can find it [here](https://github.com/libigl/libigl/tree/70d2abaa53616af35c7857bf8f52c8a234f150ff)).
+    - Replace `random_subdiv_remesh_bin.exe` with your newly compiled file (update both the folder and `train_full.py` accordingly).
+
 
 ##  Acknowledgments
 

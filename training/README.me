@@ -1,0 +1,10 @@
+To train a network, just edit the two first lines in train_hyperparameters.json:
+- Put all your obj files under mesh_folder (you can change it)
+- Decide the name of your output folder (must be non existing and be under ./data/jobs/{insert name here}/)
+
+Then, install pytorch, scipy matplotlib and run ./tran_full.py
+
+Note that this is made for Windows. 
+If you are using Linux: 
+- you must recompile surface_multigrid_code/09_random_subdiv_remesh (you must add ligigl under surface_multigrid_code/, I removed it as it made my zip file bigger than ecampus's requirement, you can find it [here](https://github.com/libigl/libigl/tree/70d2abaa53616af35c7857bf8f52c8a234f150ff))
+- replace random_subdiv_remesh_bin.exe with your new file (both in the folder and in train_full.py)

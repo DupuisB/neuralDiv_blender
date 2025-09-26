@@ -1,0 +1,1 @@
+{"mesh_folder": "./data/data_meshes/objs_train/", "output_path": "./data/jobs/sphere_blocky/", "epochs": 700, "lr": 0.002, "Din": 6, "Dout": 32, "h_initNet": [32, 32], "h_edgeNet": [32, 32], "h_vertexNet": [32, 32], "numSubd": 1, "numMeshes": 20, "target_faces": 1000}
